@@ -42,4 +42,23 @@ DEFAULT_DATABASE = SQLServerDBTest
 GRANT ALTER ANY DATABASE TO Manu
 
 /*---------------------EX-3---------------------*/
+USE MASTER
+CREATE DATABASE DbToDrop
+USE DbToDrop
+CREATE TABLE TabToDrop (id INT, name varchar(25))
+
+GO
+CREATE TRIGGER Test
+ON DATABASE
+FOR DROP_TABLE, ALTER_TABLE
+AS 
+PRINT 'You must disable Trigger "safety" to drop or alter tables!'   
+   ROLLBACK
+
+SELECT * FROM sys.triggers
+
+DROP TABLE TabToDrop
+GO
+DISABLE TRIGGER Test ON DATABASE
+DROP TABLE TabToDrop
 
